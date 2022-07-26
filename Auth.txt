@@ -1,0 +1,38 @@
+yarn add process browserify-zlib stream-browserify util buffer assert @craco/craco
+
+step2--
+
+Change scripts code config in package.json
+"scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+
+step3--
+Finally, create a new file in the root of the project craco.config.js with these contents:
+const webpack = require("webpack");
+
+module.exports = {
+  webpack: {
+    configure: {
+      resolve: {
+        fallback: {
+          process: require.resolve("process/browser"),
+          zlib: require.resolve("browserify-zlib"),
+          stream: require.resolve("stream-browserify"),
+          util: require.resolve("util"),
+          buffer: require.resolve("buffer"),
+          asset: require.resolve("assert"),
+        },
+      },
+      plugins: [
+        new webpack.ProvidePlugin({
+          Buffer: ["buffer", "Buffer"],
+          process: "process/browser",
+        }),
+      ],
+    },
+  },
+};
